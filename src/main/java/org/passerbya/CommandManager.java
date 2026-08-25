@@ -1,6 +1,6 @@
 package org.passerbya;
 
-public class Main {
+public class CommandManager {
     public static void main(String[] args) {
 
     }
