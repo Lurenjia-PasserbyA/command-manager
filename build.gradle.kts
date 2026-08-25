@@ -1,9 +1,11 @@
 plugins {
     id("java")
+    id("application")
+    id("org.openjfx.javafxplugin") version "0.1.0"
 }
 
 group = "org.passerbya"
-version = "1.0-SNAPSHOT"
+version = "1.00.0000-SNAPSHOT"
 
 repositories {
     mavenCentral()
