@@ -18,6 +18,22 @@ public class CommandManager {
             Reader ErrorReader = new InputStreamReader(process.getErrorStream());
             BufferedReader stderr =new BufferedReader(ErrorReader);
 
+            stdin.write("dir C:\n".getBytes());
+            stdin.flush();
+
+            stdin.write("exit\n".getBytes());
+            stdin.flush();
+            stdin.close();
+
+            String line;
+            while ((line = stdout.readLine()) != null) {
+                System.out.println("[Output] " + line);
+            }
+
+            while ((line = stderr.readLine()) != null) {
+                System.out.println("[Error]" + line);
+            }
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
