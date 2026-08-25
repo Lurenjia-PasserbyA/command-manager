@@ -21,10 +21,6 @@ public class CommandManager {
             stdin.write("dir C:\n".getBytes());
             stdin.flush();
 
-            stdin.write("exit\n".getBytes());
-            stdin.flush();
-            stdin.close();
-
             String line;
             while ((line = stdout.readLine()) != null) {
                 System.out.println("[Output] " + line);
