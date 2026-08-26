@@ -31,3 +31,14 @@ tasks.test {
 application {
     mainClass = "org.passerbya.MainGUI"
 }
+
+tasks.withType<JavaExec> {
+    val javafxModules = sourceSets["main"].runtimeClasspath
+        .filter { it.name.contains("javafx") }
+        .joinToString(File.pathSeparator) { it.absolutePath }
+
+    jvmArgs = listOf(
+        "--module-path", javafxModules,
+        "--add-modules", "javafx.controls,javafx.fxml"
+    )
+}

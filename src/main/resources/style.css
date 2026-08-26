@@ -1,0 +1,10 @@
+.root {
+    -fx-background-color: #1E1E1E;
+    -fx-font-family: "Microsoft YaHei", sans-serif, "Noto Sans SC CJK";
+}
+
+.button {
+    -fx-background-color: #6E6E6E;
+    -fx-border-color: #6E6E6E;
+    fx-border-width: 2px;
+}
