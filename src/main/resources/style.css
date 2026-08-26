@@ -6,14 +6,15 @@
 .button {
     -fx-background-color: #6E6E6E;
     -fx-border-color: #ABABAB;
-    fx-border-width: 2px;
+    -fx-border-width: 2;
+    -fx-text-fill: #FFFFFF;
 }
 
 .home-page {
     -fx-padding: 20;
     -fx-border-color: #6B6B6B;
-    -fx-background-color: #6E6E6E;
-    -fx-border-width: 10;
+    -fx-background-color: #4F4F4F;
+    -fx-border-width: 0;
 }
 
 .terminal-page {
@@ -21,6 +22,7 @@
     -fx-border-color: #6B6B6B;
     -fx-background-color: #6E6E6E;
     -fx-border-width: 10;
+    -fx-text-fill: #FFFFFF;
 }
 
 .plugins-page {
@@ -41,4 +43,13 @@
     -fx-background-color: #6E6E6E;
     -fx-border-color: #6B6B6B;
     -fx-border-width: 10;
+}
+
+.terminal-area {
+    -fx-background-color: #6A6A6A;
+}
+
+.title-bar {
+    -fx-text-fill: #FFFFFF;
+    -fx-background-color: #1F1F1F;
 }
