@@ -5,6 +5,40 @@
 
 .button {
     -fx-background-color: #6E6E6E;
-    -fx-border-color: #6E6E6E;
+    -fx-border-color: #ABABAB;
     fx-border-width: 2px;
+}
+
+.home-page {
+    -fx-padding: 20;
+    -fx-border-color: #6B6B6B;
+    -fx-background-color: #6E6E6E;
+    -fx-border-width: 10;
+}
+
+.terminal-page {
+    -fx-padding: 20;
+    -fx-border-color: #6B6B6B;
+    -fx-background-color: #6E6E6E;
+    -fx-border-width: 10;
+}
+
+.plugins-page {
+    -fx-padding: 20;
+    -fx-border-color: #6B6B6B;
+    -fx-background-color: #6E6E6E;
+    -fx-border-width: 10;
+}
+
+.settings-page {
+    -fx-padding: 20;
+    -fx-border-color: #6B6B6B;
+    -fx-background-color: #6E6E6E;
+    -fx-border-width: 10;
+}
+
+.about-window {
+    -fx-background-color: #6E6E6E;
+    -fx-border-color: #6B6B6B;
+    -fx-border-width: 10;
 }

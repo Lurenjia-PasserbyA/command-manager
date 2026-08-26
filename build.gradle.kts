@@ -42,3 +42,6 @@ tasks.withType<JavaExec> {
         "--add-modules", "javafx.controls,javafx.fxml"
     )
 }
+
+tasks.processResources {
+}
