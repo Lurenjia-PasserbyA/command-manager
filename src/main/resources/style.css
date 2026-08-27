@@ -3,11 +3,49 @@
     -fx-font-family: "Microsoft YaHei", sans-serif, "Noto Sans SC CJK";
 }
 
-.button {
+.menu-home-button {
     -fx-background-color: #6E6E6E;
     -fx-border-color: #ABABAB;
     -fx-border-width: 2;
     -fx-text-fill: #FFFFFF;
+    -fx-pref-height: 40;
+    -fx-pref-width: 60;
+}
+
+.menu-terminal-button {
+    -fx-background-color: #6E6E6E;
+    -fx-border-color: #ABABAB;
+    -fx-border-width: 2;
+    -fx-text-fill: #FFFFFF;
+    -fx-pref-height: 40;
+    -fx-pref-width: 60;
+}
+
+.menu-plugins-button {
+    -fx-background-color: #6E6E6E;
+    -fx-border-color: #ABABAB;
+    -fx-border-width: 2;
+    -fx-text-fill: #FFFFFF;
+    -fx-pref-height: 40;
+    -fx-pref-width: 60;
+}
+
+.menu-settings-button {
+    -fx-background-color: #6E6E6E;
+    -fx-border-color: #ABABAB;
+    -fx-border-width: 2;
+    -fx-text-fill: #FFFFFF;
+    -fx-pref-height: 40;
+    -fx-pref-width: 60;
+}
+
+.menu-about-button {
+    -fx-background-color: #6E6E6E;
+    -fx-border-color: #ABABAB;
+    -fx-border-width: 2;
+    -fx-text-fill: #FFFFFF;
+    -fx-pref-height: 40;
+    -fx-pref-width: 60;
 }
 
 .home-page {
@@ -49,7 +87,26 @@
     -fx-background-color: #6A6A6A;
 }
 
-.title-bar {
+.title-label {
     -fx-text-fill: #FFFFFF;
     -fx-background-color: #1F1F1F;
+}
+
+.maximize-window-button {
+    -fx-text-fill: #FFFFFF;
+    -fx-background-color: #1F1F1F；
+}
+
+.minimize-window-button {
+    -fx-text-fill: #FFFFFF;
+    -fx-background-color: #1F1F1F；
+}
+
+.close-window-button {
+    -fx-text-fill: #FFFFFF;
+    -fx-background-color: #1F1F1F；
+}
+
+.title-text {
+    -fx-text-fill: #FFFFFF;
 }

@@ -1,97 +1,115 @@
 package org.passerbya;
 
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.stage.StageStyle;
 
-import java.net.URI;
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class MainGUI extends Application {
 
+    // 类变量
     private BorderPane root;
     private Stage primaryStage;
+    private Button menuHomeButton;
+    private Button menuTerminalButton;
+    private Button menuPluginsButton;
+    private Button menuSettingsButton;
+    private Button menuAboutButton;
 
-
+    // start()主方法
     @Override
-    public void start(Stage primaryStage){
-
-        // 初始化
-        root = new BorderPane();
-
+    public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
+        initRoot();
+        initMenuButtons();
+        initMenuContainer();
+        initEvents();
+        initSceneAndShow();
+        loadCSS();
+        customTitleBar();
+    }
 
+    // 初始化方法
+    private void initRoot() {
+        root = new BorderPane();
         primaryStage.initStyle(StageStyle.UNDECORATED);
+    }
 
-        // 定义菜单按钮
-        Button menuHomeButton = new Button("主页");
-        Button menuTerminalButton = new Button("终端");
-        Button menuPluginsButton = new Button("插件");
-        Button menuSettingsButton = new Button("设置");
-        Button menuAboutButton = new Button("关于");
+    private void initMenuButtons() {
+        menuHomeButton = new Button("主页");
+        menuHomeButton.getStyleClass().addAll("menu-home-button");
+        menuTerminalButton = new Button("终端");
+        menuTerminalButton.getStyleClass().addAll("menu-terminal-button");
+        menuPluginsButton = new Button("插件");
+        menuPluginsButton.getStyleClass().addAll("menu-plugins-button");
+        menuSettingsButton = new Button("设置");
+        menuSettingsButton.getStyleClass().addAll("menu-settings-button");
+        menuAboutButton = new Button("关于");
+        menuAboutButton.getStyleClass().addAll("menu-about-button");
+    }
 
-        // 启用事件
+    private void initMenuContainer() {
+        VBox Menu = new VBox(menuHomeButton, menuTerminalButton, menuPluginsButton, menuSettingsButton, menuAboutButton);
+        root.setLeft(Menu);
+        root.setCenter(createHomePage());
+    }
+
+    private void initEvents() {
         menuAboutButton.setOnAction(e -> showAboutWindow());
         menuHomeButton.setOnAction(e -> root.setCenter(createHomePage()));
         menuTerminalButton.setOnAction(e -> root.setCenter(createTerminalPage()));
         menuPluginsButton.setOnAction(e -> root.setCenter(createPluginsPage()));
         menuSettingsButton.setOnAction(e -> root.setCenter(createSettingsPage()));
+    }
 
-
-        // 定义菜单容器
-        VBox Menu = new VBox(menuHomeButton, menuTerminalButton, menuPluginsButton, menuSettingsButton, menuAboutButton);
-
-        // 设定root
-        root.setLeft(Menu);
-        root.setCenter(createHomePage());
-
-        // 定义主窗口
+    private void initSceneAndShow() {
         Scene scene = new Scene(root, 960, 540);
-
-        // 定义窗口标题、区域及显示这个窗口
         primaryStage.setTitle("Command Manager");
         primaryStage.setScene(scene);
         primaryStage.show();
-
-        // 加载CSS
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/style.css")).toExternalForm());
-
     }
 
-    private void showAboutWindow () {
+    private void loadCSS() {
+        Scene scene = primaryStage.getScene();
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/style.css")).toExternalForm());
+    }
+
+    // 窗口方法
+    private void showAboutWindow() {
         Stage aboutWindow = new Stage();
         aboutWindow.initOwner(primaryStage);
         aboutWindow.setTitle("关于");
         VBox content = new VBox(20);
 
         Scene scene = new Scene(content, 400, 300);
-
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/style.css")).toExternalForm());
 
         aboutWindow.setScene(scene);
         aboutWindow.showAndWait();
     }
 
-
-
+    // 页面创建方法
     private BorderPane createHomePage() {
         ListView<String> quickAccess = new ListView<>();
         quickAccess.getItems().addAll("GitHub仓库", "插件市场", "创建会话");
 
+        Label title = new Label("Command Manager - Home");
+        title.getStyleClass().addAll("title");
+        title.getStyleClass().addAll("title-text");
+
         BorderPane page = new BorderPane();
         page.getStyleClass().addAll("home-page");
 
-        Label title = new Label("Command Manager - Home");
-        title.getStyleClass().addAll("title");
+        page.setTop(title);
+        page.setCenter(quickAccess);
 
         return page;
     }
@@ -108,10 +126,49 @@ public class MainGUI extends Application {
         return null;
     }
 
-    private void cunstomTitleBar () {
-        HBox titlebar = new HBox();
-        titlebar.getStyleClass().addAll("title-bar");
+    // 标题栏
+    private void customTitleBar() {
+        HBox titleBar = new HBox();
+        titleBar.getStyleClass().addAll("title-bar");
 
+        Label titleLabel = new Label("Command Manager v1.00.0000-alpha");
+        titleLabel.getStyleClass().addAll("title-label");
 
+        Button maximizeButton = new Button("▢");
+        maximizeButton.getStyleClass().addAll("maximize-window-button");
+        maximizeButton.setOnAction(e -> {
+            primaryStage.setMaximized(!primaryStage.isMaximized());
+        });
+
+        Button minimizeButton = new Button("-");
+        minimizeButton.getStyleClass().addAll("minimize-window-button");
+
+        Button closeButton = new Button("×");
+        closeButton.setOnAction( e -> {
+            primaryStage.close();
+        });
+
+        HBox leftArea = new HBox(titleLabel);
+        leftArea.setAlignment(Pos.CENTER_LEFT);
+        HBox.setHgrow(leftArea, Priority.ALWAYS);
+
+        HBox rightArea = new HBox(10, minimizeButton, maximizeButton, closeButton);
+        rightArea.setAlignment(Pos.CENTER_RIGHT);
+
+        titleBar.getChildren().addAll(leftArea, rightArea);
+
+        titleBar.setOnMousePressed(e -> {
+            titleBar.setUserData(new double[]{e.getSceneX(), e.getSceneY()});
+        });
+
+        titleBar.setOnMouseDragged(e -> {
+            double[] offset = (double[]) titleBar.getUserData();
+            if (offset != null) {
+                primaryStage.setX(e.getScreenX() - offset[0]);
+                primaryStage.setY(e.getScreenY() - offset[1]);
+            }
+        });
+
+        root.setTop(titleBar);
     }
 }
