@@ -22,6 +22,8 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.19.0-rc2")
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
+    implementation("net.java.dev.jna:jna:5.19.1")
+    implementation("net.java.dev.jna:jna-platform:5.19.1")
 }
 
 tasks.test {

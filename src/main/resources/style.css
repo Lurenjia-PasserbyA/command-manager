@@ -87,6 +87,10 @@
     -fx-background-color: #6A6A6A;
 }
 
+.window-bar {
+    -fx-pref-height: 40;
+}
+
 .title-label {
     -fx-text-fill: #FFFFFF;
     -fx-background-color: #1F1F1F;

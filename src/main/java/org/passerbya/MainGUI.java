@@ -115,7 +115,10 @@ public class MainGUI extends Application {
     }
 
     private BorderPane createTerminalPage() {
-        return null;
+        BorderPane page = new BorderPane();
+        page.getStyleClass().addAll("terminal-page");
+
+        return page;
     }
 
     private BorderPane createPluginsPage() {
@@ -130,23 +133,21 @@ public class MainGUI extends Application {
     private void customTitleBar() {
         HBox titleBar = new HBox();
         titleBar.getStyleClass().addAll("title-bar");
+        titleBar.getStyleClass().addAll("window-bar");
 
         Label titleLabel = new Label("Command Manager v1.00.0000-alpha");
         titleLabel.getStyleClass().addAll("title-label");
 
         Button maximizeButton = new Button("▢");
         maximizeButton.getStyleClass().addAll("maximize-window-button");
-        maximizeButton.setOnAction(e -> {
-            primaryStage.setMaximized(!primaryStage.isMaximized());
-        });
+        maximizeButton.setOnAction(e -> primaryStage.setMaximized(!primaryStage.isMaximized()));
 
         Button minimizeButton = new Button("-");
         minimizeButton.getStyleClass().addAll("minimize-window-button");
+        minimizeButton.setOnAction( e -> primaryStage.setIconified(true));
 
         Button closeButton = new Button("×");
-        closeButton.setOnAction( e -> {
-            primaryStage.close();
-        });
+        closeButton.setOnAction( e -> primaryStage.close());
 
         HBox leftArea = new HBox(titleLabel);
         leftArea.setAlignment(Pos.CENTER_LEFT);
