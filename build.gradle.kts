@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "org.passerbya"
-version = "1.00.0000-alpha"
+version = "0.02.0000-alpha"
 
 repositories {
     mavenCentral()
