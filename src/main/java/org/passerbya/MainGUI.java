@@ -1,6 +1,7 @@
 package org.passerbya;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -13,6 +14,8 @@ import javafx.stage.StageStyle;
 
 import java.util.Objects;
 
+import static javafx.application.Platform.*;
+
 public class MainGUI extends Application {
 
     // 类变量
@@ -23,6 +26,8 @@ public class MainGUI extends Application {
     private Button menuPluginsButton;
     private Button menuSettingsButton;
     private Button menuAboutButton;
+    private CommandManager commandManager;
+    private TextArea terminalOutput;
 
     // start()主方法
     @Override
@@ -35,6 +40,22 @@ public class MainGUI extends Application {
         initSceneAndShow();
         loadCSS();
         customTitleBar();
+        commandManager = new CommandManager();
+        terminalOutput = new TextArea();
+        terminalOutput.setEditable(false);
+        terminalOutput = new TextArea();
+        terminalOutput.setEditable(false);
+
+        commandManager.setOutputCallback(line -> {
+            Platform.runLater(() -> {
+                // 输出显示到 outputArea
+                if (terminalOutput != null) {   // ← 加上这行
+                    terminalOutput.appendText(line + "\n");
+                }
+            });
+        });
+
+        commandManager.start();
     }
 
     // 初始化方法
@@ -118,10 +139,56 @@ public class MainGUI extends Application {
         BorderPane page = new BorderPane();
         page.getStyleClass().addAll("terminal-page");
 
+        // 命令输出区
+        terminalOutput.getStyleClass().addAll("terminal-output-area");
+
+        // 命令输入区
+        TextField inputField = new TextField();
+        inputField.setPromptText("输入命令...");
+        inputField.getStyleClass().addAll("input-field");
+
+        // 发送按钮
+        Button sendBotton = new Button("发送");
+        sendBotton.getStyleClass().addAll("send-button");
+
+        Button clearButton = new Button("清空输出");
+        clearButton.getStyleClass().addAll("clear-button"); // 可以加个红色样式
+
+        clearButton.setOnAction(e -> {
+            terminalOutput.clear();  // 一键清空！
+        });
+
+        sendBotton.setOnAction(e -> {
+            String cmd = inputField.getText();  // 拿到输入
+            if (!cmd.isEmpty()) {
+                commandManager.executeCommand(cmd);  // 实例调用
+                inputField.clear();  // 清空输入框
+            }
+        });
+
+        inputField.setOnAction(e -> sendBotton.fire());
+
+        commandManager.setOutputCallback(line -> {
+            Platform.runLater(() -> {
+                if (terminalOutput != null) {
+                    terminalOutput.appendText(line + "\n");
+                }
+            });
+        });
+
+        HBox controlBar = new HBox(10, sendBotton, clearButton, inputField);
+        controlBar.getStyleClass().addAll("control-bar");
+
+        VBox terminalArea = new VBox(10, terminalOutput, controlBar);
+
+        page.setBottom(terminalArea);
         return page;
     }
 
     private BorderPane createPluginsPage() {
+        BorderPane page = new BorderPane();
+        page.getStyleClass().addAll("plugins-page");
+
         return null;
     }
 
@@ -148,6 +215,7 @@ public class MainGUI extends Application {
 
         Button closeButton = new Button("×");
         closeButton.setOnAction( e -> primaryStage.close());
+        closeButton.getStyleClass().addAll("close-button");
 
         HBox leftArea = new HBox(titleLabel);
         leftArea.setAlignment(Pos.CENTER_LEFT);
@@ -158,9 +226,7 @@ public class MainGUI extends Application {
 
         titleBar.getChildren().addAll(leftArea, rightArea);
 
-        titleBar.setOnMousePressed(e -> {
-            titleBar.setUserData(new double[]{e.getSceneX(), e.getSceneY()});
-        });
+        titleBar.setOnMousePressed(e -> titleBar.setUserData(new double[]{e.getSceneX(), e.getSceneY()}));
 
         titleBar.setOnMouseDragged(e -> {
             double[] offset = (double[]) titleBar.getUserData();
@@ -171,5 +237,10 @@ public class MainGUI extends Application {
         });
 
         root.setTop(titleBar);
+    }
+    public void stop() {
+        if (commandManager != null) {
+            commandManager.stop();
+        }
     }
 }

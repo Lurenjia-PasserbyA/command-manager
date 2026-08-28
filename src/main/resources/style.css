@@ -98,19 +98,57 @@
 
 .maximize-window-button {
     -fx-text-fill: #FFFFFF;
-    -fx-background-color: #1F1F1F；
+    -fx-background-color: #1F1F1F;
 }
 
 .minimize-window-button {
     -fx-text-fill: #FFFFFF;
-    -fx-background-color: #1F1F1F；
+    -fx-background-color: #1F1F1F;
 }
 
-.close-window-button {
+.close-button {
     -fx-text-fill: #FFFFFF;
-    -fx-background-color: #1F1F1F；
+    -fx-background-color: #1F1F1F;
 }
 
 .title-text {
+    -fx-text-fill: #FFFFFF;
+}
+
+.terminal-output-area {
+    -fx-pref-width: 200;
+    -fx-background-color: #1E1E1E;
+    -fx-border-width: 2;
+    -fx-pref-height: 200;
+    -fx-text-fill: #007800;
+    -fx-font-family: 'Consolas', monospace;
+}
+
+.send-command-button {
+    -fx-pref-height: 30;
+    -fx-pref-width: 50;
+}
+
+.send-button {
+    -fx-pref-height: 30;
+    -fx-pref-width: 50;
+    -fx-background-color: #1E1E1E;
+    -fx-border-width: 2;
+    -fx-text-fill: #FFFFFF;
+}
+
+.clear-button {
+    -fx-pref-height: 30;
+    -fx-pref-width: 70;
+    -fx-background-color: #1E1E1E;
+    -fx-border-width: 2;
+    -fx-text-fill: #FFFFFF;
+}
+
+.input-field {
+    -fx-pref-height: 30;
+    -fx-pref-width: 600;
+    -fx-background-color: #1E1E1E;
+    -fx-border-width: 2;
     -fx-text-fill: #FFFFFF;
 }

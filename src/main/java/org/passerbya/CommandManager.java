@@ -1,37 +1,101 @@
 package org.passerbya;
 
+import javafx.application.Platform;
+
 import java.io.*;
-import java.lang.ProcessBuilder;
+import java.util.concurrent.*;
+import java.util.function.Consumer;
 
 public class CommandManager {
 
-    public static void main(String[] args) {
+    private Process process;
+    private BufferedWriter writer;
+    private ScheduledExecutorService scheduler;
+    private Consumer<String> outputCallback;
+    private boolean isRunning = false;
+
+    private boolean isWindows() {
+        return System.getProperty("os.name").toLowerCase().contains("win");
+    }
+
+    // 在启动进程时用
+    public void start() {
+        if (isRunning) return;
+
         try {
-            ProcessBuilder pd = new ProcessBuilder("powershell.exe");
-            Process process = pd.start();
+            ProcessBuilder pb;
+            String charset;
 
-            Reader OutputReader = new InputStreamReader(process.getInputStream());
-            BufferedReader stdout = new BufferedReader(OutputReader);
-
-            OutputStream stdin = process.getOutputStream();
-
-            Reader ErrorReader = new InputStreamReader(process.getErrorStream());
-            BufferedReader stderr =new BufferedReader(ErrorReader);
-
-            stdin.write("dir C:\n".getBytes());
-            stdin.flush();
-
-            String line;
-            while ((line = stdout.readLine()) != null) {
-                System.out.println("[Output] " + line);
+            if (isWindows()) {
+                pb = new ProcessBuilder("powershell.exe");
+                charset = "GBK";
+            } else {
+                pb = new ProcessBuilder("bash");
+                charset = "UTF-8";
             }
 
-            while ((line = stderr.readLine()) != null) {
-                System.out.println("[Error]" + line);
-            }
+            pb.redirectErrorStream(true);
 
-        } catch (Exception e) {
+            process = pb.start();
+
+            writer = new BufferedWriter(new OutputStreamWriter(process.getOutputStream(), charset));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream(), charset));
+
+            // 启动一个"守护线程"（后台线程），持续阻塞读取
+            Thread readerThread = new Thread(() -> {
+                try {
+                    String line;
+                    // 这里会一直阻塞，直到读到一行或者进程结束
+                    while ((line = reader.readLine()) != null) {
+                        // 把每一行输出回调给 GUI
+                        String finalLine = line;
+                        if (outputCallback != null) {
+                            Platform.runLater(() -> outputCallback.accept(finalLine));
+                        }
+                    }
+                } catch (IOException e) {
+                    // 如果进程被正常关闭，这里可能会抛异常，不处理
+                    if (process != null && !process.isAlive()) {
+                        System.out.println("🔚 进程已关闭，读取线程结束");
+                    } else {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            // 设为守护线程，这样主程序退出时它自动结束
+            readerThread.setDaemon(true);
+            readerThread.start();
+
+            isRunning = true;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void executeCommand (String command) {
+        try {
+            writer.write(command);
+            writer.newLine();
+            writer.flush();
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void setOutputCallback(Consumer<String> callback) {
+        this.outputCallback = callback;
+    }
+
+    public void stop() {
+        if (scheduler != null) {
+            scheduler.shutdownNow();
+            scheduler = null;
+        }
+        if (process != null) {
+            process.destroy();
+            process = null;
+        }
+        isRunning = false;
     }
 }
