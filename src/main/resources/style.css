@@ -145,9 +145,33 @@
     -fx-text-fill: #FFFFFF;
 }
 
+.clear-button:hover {
+    -fx-background-color: #3e3e3e
+}
+
+.send-button:hover {
+    -fx-background-color: #3e3e3e
+}
+
 .input-field {
     -fx-pref-height: 30;
     -fx-pref-width: 600;
+    -fx-background-color: #1E1E1E;
+    -fx-border-width: 2;
+    -fx-text-fill: #FFFFFF;
+}
+
+.delete-plugin-button {
+    -fx-pref-height: 30;
+    -fx-pref-width: 70;
+    -fx-background-color: #1E1E1E;
+    -fx-border-width: 2;
+    -fx-text-fill: #FFFFFF;
+}
+
+.get-new-plugin-button {
+    -fx-pref-height: 30;
+    -fx-pref-width: 70;
     -fx-background-color: #1E1E1E;
     -fx-border-width: 2;
     -fx-text-fill: #FFFFFF;

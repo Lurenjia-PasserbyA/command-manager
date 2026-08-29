@@ -1,0 +1,30 @@
+{
+  "id": "dir",
+  "version": "1.0.0",
+  "name": "Dir 目录列表",
+  "description": "列出指定目录的内容",
+  "type": "external",
+  "executable": "dir",
+  "parameters": [
+    {
+      "name": "path",
+      "label": "目录路径",
+      "type": "text",
+      "required": false
+    },
+    {
+      "name": "showHidden",
+      "label": "显示隐藏文件",
+      "type": "flag",
+      "flagValue": "/a",
+      "required": false
+    },
+    {
+      "name": "sortByTime",
+      "label": "按时间排序",
+      "type": "flag",
+      "flagValue": "/od",
+      "required": false
+    }
+  ]
+}
