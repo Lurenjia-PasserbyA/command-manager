@@ -2,6 +2,7 @@ plugins {
     id("java")
     id("application")
     id("org.openjfx.javafxplugin") version "0.1.0"
+    id("com.gradleup.shadow") version "9.2.0"
 }
 
 group = "org.passerbya"
@@ -11,39 +12,37 @@ repositories {
     mavenCentral()
 }
 
+application {
+    mainClass.set("org.passerbya.MainGUI")
+}
+
 javafx {
     version = "21"
     modules = listOf("javafx.controls", "javafx.fxml")
 }
 
 dependencies {
-    testImplementation(platform("org.junit:junit-bom:6.0.0"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.19.0-rc2")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
     implementation("net.java.dev.jna:jna:5.19.1")
     implementation("net.java.dev.jna:jna-platform:5.19.1")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 tasks.test {
     useJUnitPlatform()
 }
 
-application {
-    mainClass = "org.passerbya.MainGUI"
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
-tasks.withType<JavaExec> {
-    val javafxModules = sourceSets["main"].runtimeClasspath
-        .filter { it.name.contains("javafx") }
-        .joinToString(File.pathSeparator) { it.absolutePath }
-
-    jvmArgs = listOf(
-        "--module-path", javafxModules,
-        "--add-modules", "javafx.controls,javafx.fxml"
-    )
-}
-
-tasks.processResources {
+// shadow 插件会自动把 JavaFX 和所有依赖都打进 JAR
+// 执行 ./gradlew shadowJar 即可
+tasks.shadowJar {
+    archiveClassifier.set("fat")
+    manifest {
+        attributes["Main-Class"] = "org.passerbya.MainGUI"
+    }
 }

@@ -54,15 +54,14 @@ public class CommandManager {
                         }
                     }
                 } catch (IOException e) {
-                    // 如果进程被正常关闭，这里可能会抛异常，不处理
                     if (process != null && !process.isAlive()) {
-                        System.out.println("🔚 进程已关闭，读取线程结束");
+                        System.out.println("进程已关闭，读取线程结束");
                     } else {
                         e.printStackTrace();
                     }
                 }
             });
-            // 设为守护线程，这样主程序退出时它自动结束
+            // 设为守护线程，这样主程序退出时自动结束
             readerThread.setDaemon(true);
             readerThread.start();
 

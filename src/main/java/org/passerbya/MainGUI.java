@@ -15,6 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.image.Image;
@@ -120,11 +121,11 @@ public class MainGUI extends Application {
         int targetIndex = order.indexOf(target);
 
         if (targetIndex > currentIndex) {
-            return "up";    // 往下走 → 从下往上滑
+            return "up";
         } else if (targetIndex < currentIndex) {
-            return "down";  // 往上走 → 从上往下滑
+            return "down";
         } else {
-            return "none";  // 同一个页面，不用动画
+            return "none";
         }
     }
 
@@ -134,11 +135,11 @@ public class MainGUI extends Application {
         node.setOpacity(0);
 
         if ("up".equals(direction)) {
-            node.setTranslateY(30);   // 从下面滑入
+            node.setTranslateY(30);
         } else if ("down".equals(direction)) {
-            node.setTranslateY(-30);  // 从上面滑入
+            node.setTranslateY(-30);
         } else {
-            node.setTranslateY(0);    // 无位移
+            node.setTranslateY(0);
         }
 
         // 淡入 + 滑入
@@ -166,16 +167,22 @@ public class MainGUI extends Application {
 
     // 窗口方法
     private void showAboutWindow() {
-        Stage aboutWindow = new Stage();
-        aboutWindow.initOwner(primaryStage);
-        aboutWindow.setTitle("关于");
-        VBox content = new VBox(20);
+        Stage aboutStage = new Stage();
+        aboutStage.setTitle("关于");
+        aboutStage.setWidth(400);
+        aboutStage.setHeight(300);
+        aboutStage.initModality(Modality.APPLICATION_MODAL);
 
-        Scene scene = new Scene(content, 400, 300);
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/style.css")).toExternalForm());
+        Label label = new Label();
+        label.setText("Command Manager\n版本: 0.02.0000-alpha\n作者: 陈弘宇\n仓库：https://github.com/Lurenjia-PasserbyA/command-manager");
+        label.getStyleClass().addAll("about-window");
+        label.setAlignment(Pos.CENTER);
 
-        aboutWindow.setScene(scene);
-        aboutWindow.showAndWait();
+        VBox root = new VBox(label);
+        root.setAlignment(Pos.CENTER);
+        Scene scene = new Scene(root, 400, 300);
+        aboutStage.setScene(scene);
+        aboutStage.showAndWait();
     }
 
     // 页面创建方法
@@ -200,7 +207,7 @@ public class MainGUI extends Application {
         BorderPane page = new BorderPane();
         page.getStyleClass().addAll("terminal-page");
 
-        // ========== 左侧：插件列表 ==========
+        // 插件列表
         terminalPluginListView = new ListView<>();
         terminalPluginListView.getItems().addAll(pluginList);
 
@@ -223,7 +230,7 @@ public class MainGUI extends Application {
             }
         });
 
-        // ========== 右侧：参数面板 ==========
+        // 参数面板
         VBox rightPanel = new VBox(15);
         rightPanel.getStyleClass().add("right-panel");
         rightPanel.setPadding(new Insets(20));
@@ -240,12 +247,12 @@ public class MainGUI extends Application {
 
         rightPanel.getChildren().addAll(titleLabel, paramFieldsContainer, executeBtn);
 
-        // ========== 组装左右布局 ==========
+        // 组装左右布局
         SplitPane splitPane = new SplitPane();
         splitPane.getItems().addAll(terminalPluginListView, rightPanel);
         splitPane.setDividerPositions(0.35);
 
-        // ========== 底部：终端输出区 ==========
+        // 终端输出区
         terminalOutput.getStyleClass().addAll("terminal-output-area");
 
         TextField inputField = new TextField();
@@ -318,10 +325,10 @@ public class MainGUI extends Application {
 
         pluginListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
-                selectedPlugin = newVal;  // ← 存整个对象，不只是名字
+                selectedPlugin = newVal;  // 存整个对象
                 System.out.println("✅ 选中插件: " + selectedPlugin.getName());
                 // 如果你想让终端页立即刷新参数表单，可以在这里调用刷新方法
-                refreshTerminalParamPanel();  // 后面定义
+                refreshTerminalParamPanel();
             }
         });
 
@@ -350,7 +357,7 @@ public class MainGUI extends Application {
         PluginsLoader loader = new PluginsLoader();
         loader.loadPlugins();
 
-        pluginList = loader.getLoadedPlugins();   // ← 加上这行
+        pluginList = loader.getLoadedPlugins();
 
         System.out.print("✅ 成功加载 " + pluginList.size() + " 个插件");
     }
@@ -490,7 +497,7 @@ public class MainGUI extends Application {
         container.getChildren().clear();
 
         if (selectedPlugin == null) {
-            Label emptyLabel = new Label("⚠️ 请从左侧列表选择一个插件");
+            Label emptyLabel = new Label("⚠请从左侧列表选择一个插件");
             emptyLabel.getStyleClass().add("param-empty-label");
             container.getChildren().add(emptyLabel);
             return;
@@ -498,7 +505,7 @@ public class MainGUI extends Application {
 
         List<PluginParameter> params = selectedPlugin.getParameters();
         if (params == null || params.isEmpty()) {
-            Label noParamLabel = new Label("✅ 此插件无需参数，直接点击执行即可");
+            Label noParamLabel = new Label("此插件无需参数，直接点击执行即可");
             noParamLabel.getStyleClass().add("param-empty-label");
             container.getChildren().add(noParamLabel);
             return;
