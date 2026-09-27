@@ -1,0 +1,181 @@
+.theme-dark {
+    /* Containers */
+    -fx-bg-root: #0D0D0D;
+    -fx-bg-page: #141414;
+    -fx-bg-panel: #1A1A1A;
+
+    /* Controls */
+    -fx-bg-control: #1E1E1E;
+    -fx-bg-control-hover: #2A2A2A;
+    -fx-bg-control-pressed: #000000;
+
+    /* Borders */
+    -fx-border-subtle: #2A2A2A;
+    -fx-border-strong: #3A3A3A;
+    -fx-border-focus: #4A9EFF;
+
+    /* Text */
+    -fx-text-primary: #FFFFFF;
+    -fx-text-secondary: #AAAAAA;
+    -fx-text-terminal: #00C853;
+    -fx-text-prompt: #666666;
+
+    /* Radius */
+    -fx-radius-sm: 4;
+    -fx-radius-md: 6;
+    -fx-radius-lg: 10;
+
+    /* Global */
+    -fx-background-color: -fx-bg-root;
+    -fx-font-family: "Microsoft YaHei", "Noto Sans SC CJK", sans-serif;
+}
+
+/* ---------- Menu Buttons ---------- */
+.menu-button {
+    -fx-background-color: -fx-bg-control;
+    -fx-border-color: -fx-border-strong;
+    -fx-border-width: 1;
+    -fx-border-radius: -fx-radius-md;
+    -fx-background-radius: -fx-radius-md;
+    -fx-text-fill: -fx-text-primary;
+    -fx-pref-height: 40;
+    -fx-pref-width: 60;
+    -fx-cursor: hand;
+}
+
+.menu-button:hover {
+    -fx-background-color: -fx-bg-control-hover;
+}
+
+.menu-button:pressed {
+    -fx-background-color: -fx-bg-control-pressed;
+}
+
+/* ---------- Page Containers ---------- */
+.home-page {
+    -fx-padding: 20;
+    -fx-background-color: -fx-bg-page;
+    -fx-background-radius: -fx-radius-lg;
+}
+
+.terminal-page,
+.plugins-page,
+.settings-page {
+    -fx-padding: 20;
+    -fx-background-color: -fx-bg-page;
+    -fx-border-color: -fx-border-subtle;
+    -fx-border-width: 1;
+    -fx-border-radius: -fx-radius-lg;
+    -fx-background-radius: -fx-radius-lg;
+}
+
+/* ---------- Titles ---------- */
+.title-text {
+    -fx-text-fill: -fx-text-primary;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+/* ---------- Terminal Output ---------- */
+.terminal-page-panel,
+.terminal-page-box {
+    -fx-pref-width: 200;
+    -fx-pref-height: 200;
+    -fx-background-color: -fx-bg-control;
+    -fx-border-color: -fx-border-strong;
+    -fx-border-width: 1;
+    -fx-border-radius: -fx-radius-md;
+    -fx-background-radius: -fx-radius-md;
+    -fx-text-fill: -fx-text-terminal;
+    -fx-font-family: "Consolas", "JetBrains Mono", monospace;
+    -fx-font-size: 13px;
+}
+
+.terminal-page-panel .content,
+.terminal-page-box .content {
+    -fx-background-color: -fx-bg-control;
+}
+
+.split-pane {
+    -fx-background-color: -fx-bg-control;
+    -fx-border-color: -fx-border-strong;
+    -fx-border-width: 1;
+    -fx-border-radius: -fx-radius-md;
+    -fx-background-radius: -fx-radius-md;
+}
+
+.split-pane .split-pane-divider {
+    -fx-background-color: -fx-border-strong;
+    -fx-padding: 0 1 0 1;
+}
+
+/* ---------- Input Fields ---------- */
+.input-field {
+    -fx-pref-height: 30;
+    -fx-pref-width: 600;
+    -fx-background-color: -fx-bg-control;
+    -fx-border-color: -fx-border-strong;
+    -fx-border-width: 1;
+    -fx-border-radius: -fx-radius-sm;
+    -fx-background-radius: -fx-radius-sm;
+    -fx-text-fill: -fx-text-primary;
+    -fx-prompt-text-fill: -fx-text-prompt;
+}
+
+.input-field:focused {
+    -fx-border-color: -fx-border-focus;
+}
+
+/* ---------- Action Buttons ---------- */
+.action-button {
+    -fx-pref-height: 30;
+    -fx-background-color: -fx-bg-control;
+    -fx-border-color: -fx-border-strong;
+    -fx-border-width: 1;
+    -fx-border-radius: -fx-radius-sm;
+    -fx-background-radius: -fx-radius-sm;
+    -fx-text-fill: -fx-text-primary;
+    -fx-cursor: hand;
+}
+
+.action-button:hover {
+    -fx-background-color: -fx-bg-control-hover;
+}
+
+.action-button:pressed {
+    -fx-background-color: -fx-bg-control-pressed;
+}
+
+/* Button width overrides */
+.send-button            { -fx-pref-width: 50; }
+.clear-button           { -fx-pref-width: 70; }
+.delete-plugin-button   { -fx-pref-width: 70; }
+.get-new-plugin-button  { -fx-pref-width: 70; }
+
+/* ---------- About Window ---------- */
+.about-window {
+    -fx-background-color: -fx-bg-panel;
+    -fx-border-color: -fx-border-subtle;
+    -fx-border-width: 1;
+    -fx-border-radius: -fx-radius-lg;
+    -fx-background-radius: -fx-radius-lg;
+    -fx-text-fill: -fx-text-primary;
+    -fx-padding: 20;
+}
+
+/* ---------- Window Bar ---------- */
+.window-bar {
+    -fx-pref-height: 40;
+}
+
+.window-control-button {
+    -fx-background-color: -fx-bg-control;
+    -fx-text-fill: -fx-text-primary;
+    -fx-background-radius: -fx-radius-sm;
+    -fx-border-radius: -fx-radius-sm;
+    -fx-cursor: hand;
+}
+
+.window-control-button:hover {
+    -fx-background-color: -fx-bg-control-hover;
+}
