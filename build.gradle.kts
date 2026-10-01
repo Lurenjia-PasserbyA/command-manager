@@ -23,7 +23,7 @@ javafx {
 }
 
 application {
-    mainClass.set("org.passerbya.MainGUI")
+    mainClass.set("org.passerbya.Main")
 }
 
 dependencies {

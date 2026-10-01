@@ -1,9 +1,10 @@
-package org.passerbya;
+package org.passerbya.core;
 
 import javafx.application.Platform;
+import org.passerbya.debug.DebugLogger;
 
 import java.io.*;
-import java.util.concurrent.*;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.function.Consumer;
 
 public class CommandManager {
@@ -18,7 +19,6 @@ public class CommandManager {
         return System.getProperty("os.name").toLowerCase().contains("win");
     }
 
-    // 在启动进程时用
     public void start() {
         if (isRunning) return;
 
@@ -35,19 +35,15 @@ public class CommandManager {
             }
 
             pb.redirectErrorStream(true);
-
             process = pb.start();
 
             writer = new BufferedWriter(new OutputStreamWriter(process.getOutputStream(), charset));
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream(), charset));
 
-            // 启动一个"守护线程"（后台线程），持续阻塞读取
             Thread readerThread = new Thread(() -> {
                 try {
                     String line;
-                    // 这里会一直阻塞，直到读到一行或者进程结束
                     while ((line = reader.readLine()) != null) {
-                        // 把每一行输出回调给 GUI
                         String finalLine = line;
                         if (outputCallback != null) {
                             Platform.runLater(() -> outputCallback.accept(finalLine));
@@ -55,24 +51,22 @@ public class CommandManager {
                     }
                 } catch (IOException e) {
                     if (process != null && !process.isAlive()) {
-                        System.out.println("Process has exited.");
+                        DebugLogger.info("Process has exited.");
                     } else {
-                        e.printStackTrace();
+                        DebugLogger.error("Reader thread error", e);
                     }
                 }
             });
-            // 设为守护线程，这样主程序退出时自动结束
             readerThread.setDaemon(true);
             readerThread.start();
 
             isRunning = true;
-
         } catch (IOException e) {
-            e.printStackTrace();
+            DebugLogger.error("Failed to start command manager", e);
         }
     }
 
-    public void executeCommand (String command) {
+    public void executeCommand(String command) {
         try {
             writer.write(command);
             writer.newLine();
