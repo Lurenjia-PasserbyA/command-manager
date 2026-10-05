@@ -20,23 +20,24 @@
     -fx-text-terminal: #00C853;
     -fx-text-prompt: #666666;
 
-    /* Radius */
-    -fx-radius-sm: 4;
-    -fx-radius-md: 6;
-    -fx-radius-lg: 10;
-
     /* Global */
     -fx-background-color: -fx-bg-root;
     -fx-font-family: "Microsoft YaHei", "Noto Sans SC CJK", sans-serif;
 }
+
+/* 关于圆角：这里刻意不用 CSS 变量。
+   JavaFX 21 在把变量值喂给 -fx-border-radius / -fx-background-radius 时，
+   会先转成 Double 再强转 Size，抛 ClassCastException，半径静默失效并刷警告。
+   字面量（4px / 6px / 10px）和纯数字都能正常工作，所以半径一律写字面值。
+   颜色变量没有这个问题，继续用。 */
 
 /* ---------- Menu Buttons ---------- */
 .menu-button {
     -fx-background-color: -fx-bg-control;
     -fx-border-color: -fx-border-strong;
     -fx-border-width: 1;
-    -fx-border-radius: -fx-radius-md;
-    -fx-background-radius: -fx-radius-md;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
     -fx-text-fill: -fx-text-primary;
     -fx-pref-height: 40;
     -fx-pref-width: 60;
@@ -55,7 +56,7 @@
 .home-page {
     -fx-padding: 20;
     -fx-background-color: -fx-bg-page;
-    -fx-background-radius: -fx-radius-lg;
+    -fx-background-radius: 10px;
 }
 
 .terminal-page,
@@ -65,8 +66,8 @@
     -fx-background-color: -fx-bg-page;
     -fx-border-color: -fx-border-subtle;
     -fx-border-width: 1;
-    -fx-border-radius: -fx-radius-lg;
-    -fx-background-radius: -fx-radius-lg;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
 }
 
 /* ---------- Titles ---------- */
@@ -84,8 +85,8 @@
     -fx-background-color: -fx-bg-control;
     -fx-border-color: -fx-border-strong;
     -fx-border-width: 1;
-    -fx-border-radius: -fx-radius-md;
-    -fx-background-radius: -fx-radius-md;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
     -fx-text-fill: -fx-text-terminal;
     -fx-font-family: "Consolas", "JetBrains Mono", monospace;
     -fx-font-size: 13px;
@@ -100,13 +101,13 @@
     -fx-background-color: -fx-bg-control;
     -fx-border-color: -fx-border-strong;
     -fx-border-width: 1;
-    -fx-border-radius: -fx-radius-md;
-    -fx-background-radius: -fx-radius-md;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
 }
 
 .split-pane .split-pane-divider {
     -fx-background-color: -fx-border-strong;
-    -fx-padding: 0 1 0 1;
+    -fx-padding: 0 1px 0 1px;
 }
 
 /* ---------- Input Fields ---------- */
@@ -116,8 +117,8 @@
     -fx-background-color: -fx-bg-control;
     -fx-border-color: -fx-border-strong;
     -fx-border-width: 1;
-    -fx-border-radius: -fx-radius-sm;
-    -fx-background-radius: -fx-radius-sm;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
     -fx-text-fill: -fx-text-primary;
     -fx-prompt-text-fill: -fx-text-prompt;
 }
@@ -132,8 +133,8 @@
     -fx-background-color: -fx-bg-control;
     -fx-border-color: -fx-border-strong;
     -fx-border-width: 1;
-    -fx-border-radius: -fx-radius-sm;
-    -fx-background-radius: -fx-radius-sm;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
     -fx-text-fill: -fx-text-primary;
     -fx-cursor: hand;
 }
@@ -157,8 +158,8 @@
     -fx-background-color: -fx-bg-panel;
     -fx-border-color: -fx-border-subtle;
     -fx-border-width: 1;
-    -fx-border-radius: -fx-radius-lg;
-    -fx-background-radius: -fx-radius-lg;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
     -fx-text-fill: -fx-text-primary;
     -fx-padding: 20;
 }
@@ -171,11 +172,94 @@
 .window-control-button {
     -fx-background-color: -fx-bg-control;
     -fx-text-fill: -fx-text-primary;
-    -fx-background-radius: -fx-radius-sm;
-    -fx-border-radius: -fx-radius-sm;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
     -fx-cursor: hand;
 }
 
 .window-control-button:hover {
     -fx-background-color: -fx-bg-control-hover;
+}
+
+/* ---------- Settings Page ---------- */
+.settings-grid {
+    -fx-background-color: -fx-bg-panel;
+    -fx-background-radius: 6px;
+    -fx-border-color: -fx-border-subtle;
+    -fx-border-width: 1;
+    -fx-border-radius: 6px;
+    -fx-padding: 16;
+}
+
+.settings-section {
+    -fx-text-fill: -fx-text-secondary;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 8 0 0 0;
+}
+
+.settings-label {
+    -fx-text-fill: -fx-text-primary;
+}
+
+.settings-status {
+    -fx-text-fill: -fx-text-secondary;
+}
+
+.settings-hint {
+    -fx-text-fill: -fx-text-prompt;
+    -fx-font-size: 11px;
+}
+
+.settings-combo {
+    -fx-background-color: -fx-bg-control;
+    -fx-border-color: -fx-border-strong;
+    -fx-border-width: 1;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-text-fill: -fx-text-primary;
+}
+
+.settings-combo .list-cell {
+    -fx-background-color: -fx-bg-control;
+    -fx-text-fill: -fx-text-primary;
+}
+
+.settings-save-button {
+    -fx-pref-width: 70;
+}
+
+/* ---------- Execute Button (ParamPanel) ---------- */
+.execute-btn {
+    -fx-pref-height: 32;
+    -fx-background-color: -fx-bg-control;
+    -fx-border-color: -fx-border-focus;
+    -fx-border-width: 1;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-text-fill: -fx-text-primary;
+    -fx-cursor: hand;
+}
+
+.execute-btn:hover {
+    -fx-background-color: -fx-bg-control-hover;
+}
+
+.execute-btn:pressed {
+    -fx-background-color: -fx-bg-control-pressed;
+}
+
+/* ParamPanel 的标签与空状态提示 */
+.param-title {
+    -fx-text-fill: -fx-text-primary;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.param-label {
+    -fx-text-fill: -fx-text-primary;
+}
+
+.param-empty-label {
+    -fx-text-fill: -fx-text-prompt;
 }

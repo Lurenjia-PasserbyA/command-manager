@@ -6,6 +6,7 @@ build/
 .kotlin
 
 ### IntelliJ IDEA ###
+.idea/
 .idea/modules.xml
 .idea/jarRepositories.xml
 .idea/compiler.xml
@@ -41,3 +42,7 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+### 运行时配置与本地 Gradle 缓存（不要提交）###
+.command-manager/
+.gradle-user-home/
