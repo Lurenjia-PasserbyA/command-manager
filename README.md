@@ -75,12 +75,63 @@
 设置页保存的配置写到运行目录下的 `.command-manager/config.json`。文件损坏或缺失时
 程序用默认值启动，并把问题打到控制台，不会因此起不来。
 
+**Shell 路径默认用绝对路径**，不依赖 `PATH`：
+
+| 平台 | 默认值 |
+|---|---|
+| Windows | `%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe`（存在 PowerShell 7 时优先用 `%SystemRoot%\Program Files\PowerShell\7\pwsh.exe`） |
+| 其他 | `/bin/bash` |
+
+写裸名字（`powershell.exe`）看着更干净，但 `PATH` 是会被改的 —— 安全加固、
+精简 `PATH`、把 `System32` 剔出去之类都会让它解析不到，然后程序莫名起不来。
+
+如果配置的路径起不来，程序会**依次尝试内置候选**（系统 PowerShell、`pwsh`、
+`bash`、`sh`），并把每次回退打到控制台：
+
+```
+[WARN] Cannot start shell 'C:\does\not\exist\fakeshell.exe': CreateProcess error=2, ...
+[WARN] Fell back to shell: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+[INFO] Shell started: [C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe, -NoLogo, -NoExit]
+```
+
+注意回退时启动参数是按**候选自己**的类型给的。所以配置一个不存在的
+PowerShell 路径、回退到真 PowerShell 时，`-NoLogo -NoExit` 不会丢；
+而如果回退到 `bash`，也不会把 PowerShell 的参数硬塞过去。
+
 ## 开发
 
 ```bash
 ./gradlew test    # 单元测试
 ./gradlew build   # 编译 + 测试
+./gradlew run     # 直接运行
 ```
+
+### 打包成单个可执行 jar
+
+```bash
+./gradlew fatJar
+# -> build/libs/command-manager-1.0-SNAPSHOT-all.jar  (约 11 MB)
+```
+
+这个 jar 已经把 **JavaFX**（含 Windows 原生库 `.dll`）和 **Jackson** 全打进去了，
+所以运行时不需要再单独装 JavaFX 或配 `--module-path`：
+
+```bash
+java -jar command-manager-1.0-SNAPSHOT-all.jar
+```
+
+只需要机器上装了 **JDK/JRE 21**（jar 里不含 JVM 本身）。
+
+JavaFX 的原生库打包在 `javafx-graphics-*-win.jar` 内部，运行时 JavaFX 会自己解压到
+临时目录再加载，这点 fat jar 不用额外处理 —— 已验证。
+
+程序的工作目录就是它启动时的当前目录：`plugins/` 和 `.command-manager/config.json`
+都相对它创建。所以分发时把 jar 单独放一个目录、旁边放 `plugins/` 即可。
+
+> 用 `java -jar` 启动时会看到一条 `警告: Unsupported JavaFX configuration: classes were
+> loaded from 'unnamed module'`。这是 JavaFX 在类路径（而非模块路径）下运行时的固有提示，
+> **不影响功能**。想消掉它就得用 `--module-path` 跑，那样又依赖外部的 JavaFX 目录，
+> 与"单文件分发"的目的冲突，所以这里选择保留提示。
 
 代码结构：
 

@@ -41,7 +41,7 @@ public class SettingsPage {
 
         // ---- 终端 ----
         TextField shellField = new TextField(settings.getShell());
-        shellField.setPromptText("例如 powershell.exe 或 bash");
+        shellField.setPromptText("建议填绝对路径，例如 C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe");
         shellField.getStyleClass().add("input-field");
 
         TextField argsField = new TextField(settings.getShellArgs());

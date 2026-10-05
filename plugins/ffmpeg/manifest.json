@@ -1,0 +1,37 @@
+{
+  "id": "ffmpeg.transcode",
+  "version": "0.1.0",
+  "name": "FFmpeg 转码",
+  "description": "用 ffmpeg 把视频转码 / 缩放。测试插件，演示带包装脚本的插件怎么写。",
+  "type": "shell",
+  "executable": "powershell.exe -ExecutionPolicy Bypass -NoProfile -File \"plugins/ffmpeg/run.ps1\"",
+  "isExecutable": true,
+  "parameters": [
+    {
+      "name": "input",
+      "label": "输入文件",
+      "type": "file",
+      "required": true
+    },
+    {
+      "name": "output",
+      "label": "输出文件",
+      "type": "text",
+      "required": true
+    },
+    {
+      "name": "resolution",
+      "label": "分辨率",
+      "type": "select",
+      "required": false,
+      "options": ["original", "1920:-1", "1280:-1", "854:-1", "640:-1"]
+    },
+    {
+      "name": "quality",
+      "label": "画质",
+      "type": "select",
+      "required": false,
+      "options": ["high", "medium", "low", "tiny"]
+    }
+  ]
+}

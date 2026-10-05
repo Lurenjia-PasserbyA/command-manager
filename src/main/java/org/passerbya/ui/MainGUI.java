@@ -1,6 +1,7 @@
 package org.passerbya.ui;
 
 import javafx.animation.FadeTransition;
+import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -25,8 +26,6 @@ import org.passerbya.ui.pages.PluginsPage;
 import org.passerbya.ui.pages.SettingsPage;
 import org.passerbya.ui.pages.TerminalPage;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 public class MainGUI extends Application {
@@ -38,7 +37,7 @@ public class MainGUI extends Application {
     private PluginManager pluginManager;
     private AppSettings settings;
     private TextArea terminalOutput;
-    private String currentPage;
+    private PageId currentPage;
     private PluginManifest selectedPlugin;
     private int scrollbackLimit = 5000;
 
@@ -67,7 +66,7 @@ public class MainGUI extends Application {
         }));
         commandManager.start(settings);
 
-        switchToPage("home", HomePage.create());
+        switchToPage(PageId.HOME, HomePage.create());
     }
 
     @Override
@@ -89,23 +88,23 @@ public class MainGUI extends Application {
 
     private void initEvents() {
         menuBar.aboutButton.setOnAction(e -> showAboutWindow());
-        menuBar.homeButton.setOnAction(e -> switchToPage("home", HomePage.create()));
+        menuBar.homeButton.setOnAction(e -> switchToPage(PageId.HOME, HomePage.create()));
 
         // 终端页带上当前选中的插件，这样在插件页点过某个插件后切过来是预选好的。
         // （之前 selectedPlugin 只写不读，跨页选择实际上没有任何效果。）
-        menuBar.terminalButton.setOnAction(e -> switchToPage("terminal", TerminalPage.create(
+        menuBar.terminalButton.setOnAction(e -> switchToPage(PageId.TERMINAL, TerminalPage.create(
                 pluginManager.getPlugins(),
                 commandManager,
                 terminalOutput,
                 this::setSelectedPlugin,
                 selectedPlugin)));
 
-        menuBar.pluginsButton.setOnAction(e -> switchToPage("plugins", PluginsPage.create(
+        menuBar.pluginsButton.setOnAction(e -> switchToPage(PageId.PLUGINS, PluginsPage.create(
                 pluginManager.getPlugins(),
                 this::setSelectedPlugin,
                 pluginManager)));
 
-        menuBar.settingsButton.setOnAction(e -> switchToPage("settings", SettingsPage.create(
+        menuBar.settingsButton.setOnAction(e -> switchToPage(PageId.SETTINGS, SettingsPage.create(
                 settings, this::onSettingsSaved)));
     }
 
@@ -180,39 +179,61 @@ public class MainGUI extends Application {
 
     // ---------- 页面切换动画 ----------
 
-    private String getDirection(String target) {
-        List<String> order = Arrays.asList("home", "terminal", "plugins", "settings");
-        int cur = order.indexOf(currentPage);
-        int tgt = order.indexOf(target);
-        if (tgt > cur) return "up";
-        if (tgt < cur) return "down";
+    /** 动画时长，毫秒。 */
+    private static final int ANIM_MILLIS = 300;
+
+    /** 新页面入场时的纵向偏移量（正数表示从下方滑入）。 */
+    private static final double SLIDE_OFFSET = 30;
+
+    /**
+     * 由两个页面的 id 差值决定滑动方向。
+     *
+     * <p>返回 "up" 表示目标页在菜单里更靠下 —— 视觉上像是整个内容往上走，
+     * 所以新页面从下方滑入；"down" 反之。id 相同则不滑，只淡入。
+     */
+    private static String directionOf(PageId from, PageId to) {
+        if (from == null) return "none";
+        int delta = to.id() - from.id();
+        if (delta > 0) return "up";
+        if (delta < 0) return "down";
         return "none";
     }
 
     private void animatePageIn(Node node, String direction) {
-        node.setTranslateY(0);
         node.setOpacity(0);
-        if ("up".equals(direction)) node.setTranslateY(30);
-        else if ("down".equals(direction)) node.setTranslateY(-30);
 
-        FadeTransition fade = new FadeTransition(Duration.millis(300), node);
+        // "up" -> 从下方(+y)滑入；"down" -> 从上方(-y)滑入
+        double fromY = 0;
+        if ("up".equals(direction)) fromY = SLIDE_OFFSET;
+        else if ("down".equals(direction)) fromY = -SLIDE_OFFSET;
+        node.setTranslateY(fromY);
+
+        // ease-out：起步快、收尾慢，切换看起来更跟手
+        FadeTransition fade = new FadeTransition(Duration.millis(ANIM_MILLIS), node);
         fade.setFromValue(0);
         fade.setToValue(1);
+        fade.setInterpolator(Interpolator.EASE_OUT);
 
-        TranslateTransition slide = new TranslateTransition(Duration.millis(300), node);
-        slide.setFromY(node.getTranslateY());
+        TranslateTransition slide = new TranslateTransition(Duration.millis(ANIM_MILLIS), node);
+        slide.setFromY(fromY);
         slide.setToY(0);
+        slide.setInterpolator(Interpolator.EASE_OUT);
 
         fade.play();
         slide.play();
     }
 
-    private void switchToPage(String target, Node page) {
-        if (currentPage != null && target.equals(currentPage)) return;
-        String direction = getDirection(target);
+    private void switchToPage(PageId target, Node page) {
+        // 注意：同一页面重复点击时这里会直接返回，页面内容不会重建。
+        // 目前各页面的内容都是无状态的，重建没有意义；等哪天有页面需要
+        // 每次进入都刷新（比如插件列表），要改成重建而不是提前返回。
+        if (target == currentPage) return;
+
+        String direction = directionOf(currentPage, target);
+        currentPage = target;
+
         root.setCenter(page);
         animatePageIn(page, direction);
-        currentPage = target;
     }
 
     // ---------- 其他 ----------
