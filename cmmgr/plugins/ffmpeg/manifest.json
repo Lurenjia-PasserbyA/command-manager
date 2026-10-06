@@ -4,7 +4,7 @@
   "name": "FFmpeg 转码",
   "description": "用 ffmpeg 把视频转码 / 缩放。测试插件，演示带包装脚本的插件怎么写。",
   "type": "shell",
-  "executable": "powershell.exe -ExecutionPolicy Bypass -NoProfile -File \"plugins/ffmpeg/run.ps1\"",
+  "executable": "powershell.exe -ExecutionPolicy Bypass -NoProfile -File \"cmmgr/plugins/ffmpeg/run.ps1\"",
   "isExecutable": true,
   "parameters": [
     {

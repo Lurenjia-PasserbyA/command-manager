@@ -15,9 +15,6 @@ import java.io.IOException;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AppSettings {
 
-    private static final String CONFIG_DIR = ".command-manager";
-    private static final String CONFIG_FILE = "config.json";
-
     private String shell = defaultShell();
     private String shellArgs = "";
     private String workingDirectory = "";
@@ -156,8 +153,11 @@ public class AppSettings {
         return null;
     }
 
+    /**
+     * 设置文件位置。委托给 {@link AppPaths}，避免路径散落在多个类里。
+     */
     public static File configFile() {
-        return new File(CONFIG_DIR, CONFIG_FILE);
+        return AppPaths.configFile();
     }
 
     /**

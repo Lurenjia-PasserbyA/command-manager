@@ -43,6 +43,8 @@ bin/
 ### Mac OS ###
 .DS_Store
 
-### 运行时配置与本地 Gradle 缓存（不要提交）###
-.command-manager/
+### 运行时数据 ###
+# cmmgr/ 下的配置是运行时生成的，不进版本库；
+# 但 cmmgr/plugins/ 要跟踪 —— 里面的示例插件是仓库内容的一部分。
+cmmgr/config/
 .gradle-user-home/

@@ -1,6 +1,7 @@
 package org.passerbya.tools;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.passerbya.core.AppPaths;
 import org.passerbya.debug.DebugLogger;
 
 import java.io.File;
@@ -14,13 +15,16 @@ public class PluginsLoader {
     private final ObjectMapper mapper = new ObjectMapper();
 
     public void loadPlugins() {
-        File pluginsDir = new File("plugins");
+        File pluginsDir = AppPaths.pluginsDirectory();
 
-        if (!pluginsDir.exists()) {
-            pluginsDir.mkdir();
-            DebugLogger.info("Plugin directory created");
+        if (!pluginsDir.isDirectory() && !pluginsDir.mkdirs()) {
+            DebugLogger.error("Cannot create plugin directory: " + pluginsDir.getPath());
             return;
         }
+        if (!pluginsDir.isDirectory()) {
+            return;
+        }
+        DebugLogger.info("Scanning plugins in " + pluginsDir.getPath().replace('\\', '/'));
 
         File[] folders = pluginsDir.listFiles(File::isDirectory);
         if (folders == null || folders.length == 0) {

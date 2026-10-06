@@ -11,13 +11,11 @@ import java.util.Objects;
 
 public class PluginManager {
 
-    /** 插件根目录（相对运行工作目录）。 */
-    private static final String PLUGINS_DIR = "plugins";
-
     private List<PluginManifest> plugins = Collections.emptyList();
 
+    /** 插件根目录 cmmgr/plugins/。位置由 {@link AppPaths} 统一定义。 */
     public static File pluginsDirectory() {
-        return new File(PLUGINS_DIR);
+        return AppPaths.pluginsDirectory();
     }
 
     /** 重新扫描插件目录，替换当前列表。 */

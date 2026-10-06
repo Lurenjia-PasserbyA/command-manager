@@ -21,7 +21,7 @@
 
 ## 插件
 
-插件放在运行目录下的 `plugins/<任意名字>/manifest.json`。程序启动时扫描一次这个目录。
+插件放在运行目录下的 `cmmgr/plugins/<任意名字>/manifest.json`。程序启动时扫描一次这个目录。
 
 `manifest.json` 的字段：
 
@@ -72,7 +72,7 @@
 
 ## 配置
 
-设置页保存的配置写到运行目录下的 `.command-manager/config.json`。文件损坏或缺失时
+设置页保存的配置写到运行目录下的 `cmmgr/config/config.json`。文件损坏或缺失时
 程序用默认值启动，并把问题打到控制台，不会因此起不来。
 
 **Shell 路径默认用绝对路径**，不依赖 `PATH`：
@@ -125,8 +125,24 @@ java -jar command-manager-1.0-SNAPSHOT-all.jar
 JavaFX 的原生库打包在 `javafx-graphics-*-win.jar` 内部，运行时 JavaFX 会自己解压到
 临时目录再加载，这点 fat jar 不用额外处理 —— 已验证。
 
-程序的工作目录就是它启动时的当前目录：`plugins/` 和 `.command-manager/config.json`
-都相对它创建。所以分发时把 jar 单独放一个目录、旁边放 `plugins/` 即可。
+程序的工作目录就是它启动时的当前目录，所有运行期数据都收在它下面的 `cmmgr/` 里：
+
+```
+<工作目录>/
+├── CommandManager.jar
+└── cmmgr/
+    ├── config/
+    │   └── config.json      ← 设置页保存的配置
+    └── plugins/             ← 插件
+        └── <插件名>/manifest.json
+```
+
+所以分发时把 jar 单独放一个目录即可，`cmmgr/` 会在首次运行时自动创建。
+
+> **从旧版本升级**：程序启动时会自动把旧的 `plugins/` 和 `.command-manager/config.json`
+> 搬到 `cmmgr/` 下，搬完才读配置和加载插件，所以升级后设置和插件都不会丢。
+> 迁移是逐个文件搬、目标已存在则不覆盖，失败时保留旧文件。旧目录搬空后会被删除；
+> 如果里面还有别的文件则原样保留。
 
 > 用 `java -jar` 启动时会看到一条 `警告: Unsupported JavaFX configuration: classes were
 > loaded from 'unnamed module'`。这是 JavaFX 在类路径（而非模块路径）下运行时的固有提示，

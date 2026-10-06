@@ -16,6 +16,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.passerbya.core.AppPaths;
 import org.passerbya.core.AppSettings;
 import org.passerbya.core.CommandManager;
 import org.passerbya.core.PluginManager;
@@ -44,6 +45,11 @@ public class MainGUI extends Application {
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
+
+        // 先把旧布局（plugins/ 与 .command-manager/）搬进 cmmgr/。
+        // 必须在读配置、加载插件之前 —— 否则会读到空的新位置，表现为"设置和插件全没了"。
+        AppPaths.migrateLegacyLayout();
+
         this.settings = AppSettings.load();
         this.pluginManager = new PluginManager();
         this.commandManager = new CommandManager();

@@ -65,7 +65,7 @@ winget install --id Gyan.FFmpeg
 `executable` 自己写全了参数：
 
 ```
-powershell.exe -ExecutionPolicy Bypass -NoProfile -File "plugins/ffmpeg/run.ps1"
+powershell.exe -ExecutionPolicy Bypass -NoProfile -File "cmmgr/plugins/ffmpeg/run.ps1"
 ```
 
 其中 `-ExecutionPolicy Bypass` 是必需的 —— 这台机器的 PowerShell 执行策略
@@ -76,11 +76,11 @@ powershell.exe -ExecutionPolicy Bypass -NoProfile -File "plugins/ffmpeg/run.ps1"
 
 **2. `run.ps1` 用的是相对路径，所以依赖工作目录**
 
-路径写的是 `plugins/ffmpeg/run.ps1`，和宿主找 `plugins/` 目录的方式保持一致。
-它相对的是**进程的工作目录** —— `gradlew run` 时就是项目根目录。
+路径写的是 `cmmgr/plugins/ffmpeg/run.ps1`，相对的是**进程的工作目录**
+（`gradlew run` 时就是项目根目录），和宿主找插件目录的基准一致。
 
 所以：**如果开了设置页里的「启动后自动切到插件目录」，这个路径会失效**
-（那时 shell 的当前目录已经是 `plugins/`，应该改成 `ffmpeg/run.ps1`）。
+（那时 shell 的当前目录已经是 `cmmgr/plugins/`，应该改成 `ffmpeg/run.ps1`）。
 该选项默认关闭。
 
 **3. `run.ps1` 必须带 UTF-8 BOM**
@@ -96,7 +96,7 @@ Windows PowerShell 5.1 读取**没有 BOM** 的 `.ps1` 时会按 ANSI（中文�
 |---|---|
 | `src/**/*.java` | ❌ 不能有 |
 | `src/**/style.css` | ❌ 不需要 |
-| `plugins/**/*.ps1` | ✅ 必须有 |
+| `cmmgr/plugins/**/*.ps1` | ✅ 必须有 |
 
 如果你用编辑器重存了 `run.ps1`，确认它没有把 BOM 去掉。
 

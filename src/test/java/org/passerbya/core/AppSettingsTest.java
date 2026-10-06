@@ -2,6 +2,8 @@ package org.passerbya.core;
 
 import org.junit.jupiter.api.Test;
 
+import java.nio.file.Path;
+
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -200,10 +202,23 @@ class AppSettingsTest {
     }
 
     @Test
-    void configFilePointsAtHiddenDirectory() {
-        String path = AppSettings.configFile().getPath();
+    void configFileLivesUnderCmmgrConfig() {
+        Path expected = Path.of(System.getProperty("user.dir")).resolve("cmmgr/config/config.json");
 
-        assertTrue(path.contains(".command-manager"), "实际路径：" + path);
-        assertTrue(path.endsWith("config.json"), "实际路径：" + path);
+        assertEquals(expected.normalize(), AppSettings.configFile().toPath().normalize(),
+                "配置应落在 <工作目录>/cmmgr/config/config.json");
+    }
+
+    /** 配置和插件必须在同一个 cmmgr/ 根下，各占一个子目录。 */
+    @Test
+    void pluginsAndConfigShareTheCmmgrRoot() {
+        Path workdir = Path.of(System.getProperty("user.dir"));
+
+        assertEquals(workdir.resolve("cmmgr/plugins").normalize(),
+                AppPaths.pluginsDirectory().toPath().normalize());
+        // 两者都从 cmmgr/ 下派生
+        assertTrue(AppPaths.configFile().toPath().normalize()
+                        .startsWith(workdir.resolve("cmmgr").normalize()),
+                "配置应在 cmmgr/ 下");
     }
 }
