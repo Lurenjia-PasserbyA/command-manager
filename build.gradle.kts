@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "org.passerbya"
-version = "1.0-SNAPSHOT"
+version = "0.1.2-alpha"
 
 repositories {
     mavenCentral()
@@ -42,7 +42,7 @@ tasks.test {
 }
 
 // ---------- Fat jar ----------
-// ./gradlew fatJar  ->  build/libs/command-manager-1.0-SNAPSHOT-all.jar
+// ./gradlew fatJar  ->  build/libs/command-manager-0.1.2-alpha-all.jar
 //
 // JavaFX 的原生库（.dll）就打包在 javafx-graphics-*-win.jar 里面，JavaFX 运行时
 // 会自己把它们解压到临时目录再用，所以 fat jar 不需要额外处理原生库。

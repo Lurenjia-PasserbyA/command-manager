@@ -1,0 +1,14 @@
+{
+  "id": "local.ollama",
+  "version": "0.1.0",
+  "name": "本地 AI（Ollama）",
+  "description": "调用本机 Ollama 大模型生成回答。测试插件，演示如何接本地推理服务。",
+  "type": "shell",
+  "executable": "powershell.exe -ExecutionPolicy Bypass -NoProfile -File \"cmmgr/plugins/ollama/run.ps1\"",
+  "isExecutable": true,
+  "parameters": [
+    { "name": "prompt", "label": "提示词", "type": "text", "required": true },
+    { "name": "style", "label": "风格", "type": "select", "required": false, "options": ["简洁", "详细", "代码"] },
+    { "name": "model", "label": "模型", "type": "text", "required": false }
+  ]
+}

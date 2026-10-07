@@ -266,7 +266,7 @@ public class MainGUI extends Application {
         aboutStage.initOwner(primaryStage);
 
         Label label = new Label(
-                "Command Manager\n版本: 0.02.0000-alpha\n作者: 陈弘宇\n仓库：https://github.com/Lurenjia-PasserbyA/command-manager");
+                "Command Manager\n版本: 0.1.2-alpha\n作者: Lurenjia-PasserbyA\n仓库：https://github.com/Lurenjia-PasserbyA/command-manager");
         label.getStyleClass().add("about-window");
         label.setAlignment(Pos.CENTER);
 

@@ -110,14 +110,14 @@ PowerShell 路径、回退到真 PowerShell 时，`-NoLogo -NoExit` 不会丢；
 
 ```bash
 ./gradlew fatJar
-# -> build/libs/command-manager-1.0-SNAPSHOT-all.jar  (约 11 MB)
+# -> build/libs/command-manager-0.1.2-alpha-all.jar  (约 11 MB)
 ```
 
 这个 jar 已经把 **JavaFX**（含 Windows 原生库 `.dll`）和 **Jackson** 全打进去了，
 所以运行时不需要再单独装 JavaFX 或配 `--module-path`：
 
 ```bash
-java -jar command-manager-1.0-SNAPSHOT-all.jar
+java -jar command-manager-0.1.2-alpha-all.jar
 ```
 
 只需要机器上装了 **JDK/JRE 21**（jar 里不含 JVM 本身）。
